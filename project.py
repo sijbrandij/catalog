@@ -32,7 +32,6 @@ def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    # return "The current session state is %s" % login_session['state']
     return render_template('login.html', STATE=state)
 
 # Google authentication
@@ -194,6 +193,7 @@ def itemXML(category_id, item_id):
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # redirect to login screen when user is not logged in
         if 'username' not in login_session:
             return redirect(url_for('showLogin'))
         return f(*args, **kwargs)
@@ -204,6 +204,7 @@ def login_required(f):
 @app.route('/categories/')
 def categories():
     categories = session.query(Category).all()
+    # render the public template (without links to create/edit/delete) if there is no logged in user
     if 'username' not in login_session:
         return render_template('public_categories.html', categories = categories)
     else:
@@ -212,6 +213,7 @@ def categories():
 @app.route('/categories/new/', methods=['GET', 'POST'])
 @login_required
 def newCategory():
+    # Create category if a post request is received, otherwise show form for new category
     if request.method == 'POST':
         newCategory = Category(name = request.form['name'], user_id = login_session['user_id'])
         session.add(newCategory)
@@ -226,7 +228,9 @@ def newCategory():
 def editCategory(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
     if category.user_id != login_session['user_id']:
+        # Show alert that user is not authorized to perform action if current user and category user don't match
         return "<script>function myFunction() { alert('You are not authorized to edit this category. Please create your own category in order to edit.');}</script><body onload='myFunction()''>"
+    # update category if post request is received, otherwise show form to edit category
     if request.method == 'POST':
         if request.form['name'] != '':
           category.name = request.form['name']
@@ -241,8 +245,10 @@ def editCategory(category_id):
 @login_required
 def deleteCategory(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
+    # Show alert that user is not authorized to perform action if current user and category user don't match
     if category.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()''>"
+    # delete category if post request is received, otherwise show form to delete category
     if request.method == 'POST':
       session.delete(category)
       session.commit()
@@ -255,6 +261,7 @@ def deleteCategory(category_id):
 def items(category_id):
     category = session.query(Category).filter_by(id = category_id).first()
     items = session.query(Item).filter_by(category_id = category_id)
+    # if there is no logged in user, show the public template, without links to create/edit/delete items
     if 'username' not in login_session or login_session['user_id'] != category.user_id:
         return render_template('public_items.html', category = category, items = items)
     else:
@@ -264,8 +271,10 @@ def items(category_id):
 @login_required
 def newItem(category_id):
     category = session.query(Category).filter_by(id = category_id).one()
+    # if the logged in user and the category's creator don't match, show alert and don't render the form
     if category.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to create an item in this category. Please create your own category in order to create items.');}</script><body onload='myFunction()''>"
+    # create the item if a post request is received, otherwise render the form.
     if request.method == 'POST':
         newItem = Item(name = request.form['name'], category_id = category_id, user_id = login_session['user_id'], description = request.form['description'], picture = request.form['picture'])
         session.add(newItem)
@@ -279,8 +288,10 @@ def newItem(category_id):
 @login_required
 def editItem(category_id, item_id):
     item = session.query(Item).filter_by(id = item_id, category_id = category_id).one()
+    # show alert if logged in user's id and item's user id don't match
     if item.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to edit this item. Please create your own category and items in order to edit.');}</script><body onload='myFunction()''>"
+    # update the item if a post request is received, otherwise render the edit form.
     if request.method == 'POST':
         item.name = request.form['name']
         item.description = request.form['description']
@@ -296,8 +307,10 @@ def editItem(category_id, item_id):
 @login_required
 def deleteItem(category_id, item_id):
     item = session.query(Item).filter_by(id = item_id, category_id = category_id).one()
+    # if the logged in user's id and the item's user id don't match, show an alert
     if item.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to delete this item. Please create your own category and items in order to delete.');}</script><body onload='myFunction()''>"
+    # delete the item if a post request is received, otherwise render the form to delete the item.
     if request.method == 'POST':
       session.delete(item)
       session.commit()

@@ -17,3 +17,6 @@ dicttoxml == 1.6.6
 
 ## Usage
 When the user is logged in, the user will have the option to create, update and delete categories and items.
+
+## Resources
+- the styling is copied from Udacity's oauth project.
