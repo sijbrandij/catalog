@@ -7,6 +7,7 @@ This application allows users to create categories and place items in those cate
 Flask == 0.10.1
 SQLAlchemy == 0.8.4
 httplib2 == 0.9.1
+dicttoxml == 1.6.6
 
 ## Set Up Environment & Installation
 - setup the environment: ```pip install -r requirements.txt```

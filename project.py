@@ -10,7 +10,7 @@ import random, string
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import httplib2, json, requests
+import httplib2, json, requests, dicttoxml
 from flask import make_response
 from functools import wraps
 
@@ -162,16 +162,30 @@ def categoriesJSON():
     categories = session.query(Category).all()
     return jsonify(Categories=[category.serialize for category in categories])
 
+@app.route('/categories/XML')
+def categoriesXML():
+    categories = session.query(Category).all()
+    return dicttoxml.dicttoxml([category.serialize for category in categories])
+
 @app.route('/categories/<int:category_id>/items/JSON')
 def categoryItemsJSON(category_id):
-    category = session.query(Category).filter_by(id = category_id).one()
     items = session.query(Item).filter_by(category_id = category_id).all()
     return jsonify(Items=[i.serialize for i in items])
+
+@app.route('/categories/<int:category_id>/items/XML')
+def categoryItemsXML(category_id):
+    items = session.query(Item).filter_by(category_id = category_id).all()
+    return dicttoxml.dicttoxml([item.serialize for item in items])
 
 @app.route('/categories/<int:category_id>/items/<int:item_id>/JSON')
 def itemJSON(category_id, item_id):
     item = session.query(Item).filter_by(id = item_id, category_id = category_id).one()
     return jsonify(Item=item.serialize)
+
+@app.route('/categories/<int:category_id>/items/<int:item_id>/XML')
+def itemXML(category_id, item_id):
+    item = session.query(Item).filter_by(id = item_id, category_id = category_id).one()
+    return dicttoxml.dicttoxml([item.serialize])
 
 # Decorator
 def login_required(f):
