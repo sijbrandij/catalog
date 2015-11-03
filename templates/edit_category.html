@@ -1,15 +1,13 @@
-<html>
-  <head>
-    <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
-  </head>
-  <body>
-    <h1>Edit category</h1>
-    <form action="{{url_for('editCategory', category_id = category.id)}}" method="post">
-      <p>Name:</p>
-      <input type='text' size='30' name='name' placeholder='{{category.name}}'>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
 
-      <input type='submit' value='Update'>
-      <a href="{{url_for('categories')}}">Cancel</a>
-    </form>
-  </body>
-</html>
+  <h1>Edit category</h1>
+  <form action="{{url_for('editCategory', category_id = category.id)}}" method="post">
+    <p>Name:</p>
+    <input type='text' size='30' name='name' placeholder='{{category.name}}'>
+
+    <input type='submit' value='Update'>
+    <a href="{{url_for('categories')}}">Cancel</a>
+  </form>
+{% endblock %}

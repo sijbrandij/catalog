@@ -1,27 +1,24 @@
-<html>
-  <head>
-    <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
-  </head>
-  <body>
-    <h1>Items in {{ category.name }}</h1>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+  <h1>Items in {{ category.name }}</h1>
 
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li><strong>{{message}}</strong></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
 
-    {% for item in items %}
-      <p>
-        {{ item.name }}
-        <br />
-        {{ item.description }}
-        <br />
-      </p>
-    {% endfor %}
-  </body>
-</html>
+  {% for item in items %}
+    <p>
+      {{ item.name }}
+      <br />
+      {{ item.description }}
+      <br />
+    </p>
+  {% endfor %}
+{% endblock %}
