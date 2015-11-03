@@ -244,7 +244,7 @@ def newItem(category_id):
     if category.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to create an item in this category. Please create your own category in order to create items.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        newItem = Item(name = request.form['name'], category_id = category_id, user_id = login_session['user_id'])
+        newItem = Item(name = request.form['name'], category_id = category_id, user_id = login_session['user_id'], description = request.form['description'])
         session.add(newItem)
         session.commit()
         flash("Item created")
