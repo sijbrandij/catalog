@@ -10,6 +10,17 @@
     <p>Description:</p>
     <input type='text' size='30' name='description' value='{{item.description}}'>
 
+    <p>Picture:</p>
+    <input type='text' size='30' name='picture' value='{{item.picture}}'>
+
+    {% if item.picture %}
+      <p>
+        Current picture:
+        <br />
+        <img src='{{item.picture}}'>
+      </p>
+    {% endif %}
+
     <p>
       <input type='submit' value='Update'>
       <a href="{{url_for('items', category_id = category_id)}}">Cancel</a>

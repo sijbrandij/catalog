@@ -264,7 +264,7 @@ def newItem(category_id):
     if category.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to create an item in this category. Please create your own category in order to create items.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        newItem = Item(name = request.form['name'], category_id = category_id, user_id = login_session['user_id'], description = request.form['description'])
+        newItem = Item(name = request.form['name'], category_id = category_id, user_id = login_session['user_id'], description = request.form['description'], picture = request.form['picture'])
         session.add(newItem)
         session.commit()
         flash("Item created")
@@ -279,10 +279,9 @@ def editItem(category_id, item_id):
     if item.user_id != login_session['user_id']:
         return "<script>function myFunction() { alert('You are not authorized to edit this item. Please create your own category and items in order to edit.');}</script><body onload='myFunction()''>"
     if request.method == 'POST':
-        if request.form['name'] != '':
-            item.name = request.form['name']
-        if request.form['description'] != '':
-            item.description = request.form['description']
+        item.name = request.form['name']
+        item.description = request.form['description']
+        item.picture = request.form['picture']
         session.add(item)
         session.commit()
         flash("Item updated")

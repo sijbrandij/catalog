@@ -22,6 +22,9 @@
         <br />
         {{ item.description }}
         <br />
+        {% if item.picture %}
+          <p><img src='{{item.picture}}'></p>
+        {% endif %}
         <a href="{{url_for('editItem', category_id = category.id, item_id = item.id)}}">Edit</a>
         <a href="{{url_for('deleteItem', category_id = category.id, item_id = item.id)}}">Delete</a>
         <br />

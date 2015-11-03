@@ -19,6 +19,11 @@
       <br />
       {{ item.description }}
       <br />
+      {% if item.picture %}
+        <img src='{{item.picture}}'>
+        <br />
+      {% endif %}
+
     </p>
   {% endfor %}
 {% endblock %}
