@@ -9,10 +9,7 @@ SQLAlchemy == 0.8.4
 httplib2 == 0.9.1
 
 ## Set Up Environment & Installation
-To set up, install the vagrant environment on your computer (provided by Udacity).
-- start the virtual machine: ```vagrant up```
-- login to the virtual machine: ```vagrant ssh```
-- go to the item catalog directory: ```cd /vagrant/catalog```
+- setup the environment: ```pip install -r requirements.txt```
 - setup the database: ```python database_setup.py```
 - start the server: ```python project.py```
 - visit http://localhost:3000 to see the project running
