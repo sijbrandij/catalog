@@ -25,5 +25,6 @@
       <input type='submit' value='Update'>
       <a href="{{url_for('items', category_id = category_id)}}">Cancel</a>
     </p>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
   </form>
 {% endblock %}

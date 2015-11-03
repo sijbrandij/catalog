@@ -9,5 +9,6 @@
 
     <input type='submit' value='Update'>
     <a href="{{url_for('categories')}}">Cancel</a>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
   </form>
 {% endblock %}

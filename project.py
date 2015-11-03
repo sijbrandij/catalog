@@ -1,11 +1,11 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, jsonify
-app = Flask(__name__)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
 
 from flask import session as login_session
+from flask.ext.seasurf import SeaSurf
 import random, string
 
 from oauth2client.client import flow_from_clientsecrets
@@ -13,6 +13,9 @@ from oauth2client.client import FlowExchangeError
 import httplib2, json, requests, dicttoxml
 from flask import make_response
 from functools import wraps
+
+app = Flask(__name__)
+csrf = SeaSurf(app)
 
 CLIENT_ID = json.loads(open('google_client_secrets.json', 'r').read())['web']['client_id']
 
