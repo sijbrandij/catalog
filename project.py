@@ -35,8 +35,9 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 # Google authentication
-
+@csrf.exempt
 @app.route('/gconnect', methods=['POST'])
+# This view is exempted from CSRF validation
 def gconnect():
     # Validate state token
     if request.args.get('state') != login_session['state']:
