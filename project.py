@@ -168,7 +168,9 @@ def categoriesJSON():
 @app.route('/categories/XML')
 def categoriesXML():
     categories = session.query(Category).all()
-    return dicttoxml.dicttoxml([category.serialize for category in categories])
+    response = make_response(dicttoxml.dicttoxml([category.serialize for category in categories]))
+    response.headers['Content-Type'] = 'text/xml'
+    return response
 
 @app.route('/categories/<int:category_id>/items/JSON')
 def categoryItemsJSON(category_id):
@@ -178,7 +180,9 @@ def categoryItemsJSON(category_id):
 @app.route('/categories/<int:category_id>/items/XML')
 def categoryItemsXML(category_id):
     items = session.query(Item).filter_by(category_id = category_id).all()
-    return dicttoxml.dicttoxml([item.serialize for item in items])
+    response = make_response(dicttoxml.dicttoxml([item.serialize for item in items]))
+    response.headers['Content-Type'] = 'text/xml'
+    return response
 
 @app.route('/categories/<int:category_id>/items/<int:item_id>/JSON')
 def itemJSON(category_id, item_id):
@@ -188,7 +192,9 @@ def itemJSON(category_id, item_id):
 @app.route('/categories/<int:category_id>/items/<int:item_id>/XML')
 def itemXML(category_id, item_id):
     item = session.query(Item).filter_by(id = item_id, category_id = category_id).one()
-    return dicttoxml.dicttoxml([item.serialize])
+    response = make_response(dicttoxml.dicttoxml([item.serialize]))
+    response.headers['Content-Type'] = 'text/xml'
+    return response
 
 # Decorator
 def login_required(f):
